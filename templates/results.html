@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Analysis Results - Operation Room</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #ffffff;
+            padding: 2em;
+            color: #333;
+        }
+        h1 {
+            color: #0077cc;
+        }
+        .button-row {
+            margin-bottom: 1em;
+        }
+        .button-row a {
+            background-color: #0077cc;
+            color: white;
+            padding: 0.6em 1.5em;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+        .logout {
+            background-color: #cc0000 !important;
+        }
+        table.data {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        table.data th, table.data td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        table.data th {
+            background-color: #f4f4f4;
+        }
+        .message {
+            padding: 1em;
+            background-color: #eef6ff;
+            border-left: 4px solid #0077cc;
+            margin-top: 2em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Top 10 Suspicious Shipments</h1>
+    <div class="button-row">
+        <a href="{{ url_for('index') }}">Back</a>
+        <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+        <a href="{{ url_for('export_excel') }}">Export as Excel</a>
+        <a href="{{ url_for('export_pdf') }}">Export as PDF</a>
+    </div>
+
+    {% if tables %}
+        {{ tables[0]|safe }}
+    {% else %}
+        <div class="message">No suspicious shipments found in this file.</div>
+    {% endif %}
+</body>
+</html>

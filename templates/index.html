@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Operation Room (air cargo)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        header {
+            background-color: #f4f4f4;
+            padding: 2em;
+            text-align: center;
+            border-bottom: 4px solid #0077cc;
+        }
+        header img {
+            max-width: 280px;
+            height: auto;
+        }
+        .logout {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+        }
+        .logout a {
+            text-decoration: none;
+            background: #cc0000;
+            color: white;
+            padding: 0.5em 1em;
+            border-radius: 5px;
+        }
+        .container {
+            max-width: 700px;
+            margin: 2em auto;
+            padding: 2em;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #ffffff;
+            text-align: center;
+        }
+        .browse-box, .drop-box {
+            border: 2px dashed #0077cc;
+            padding: 40px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            position: relative;
+            color: #aaa;
+        }
+        .drop-box.dragover {
+            background-color: #eef6ff;
+            border-color: #005fa3;
+        }
+        button {
+            background-color: #0077cc;
+            color: white;
+            border: none;
+            padding: 0.7em 2em;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 1em;
+        }
+        .filename {
+            margin-top: 1em;
+            color: #0077cc;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='logo.jpeg') }}" alt="Main Logo">
+    </header>
+    <div class="logout">
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+    <div class="container">
+        <h2>Upload Excel Manifest</h2>
+        <form action="/analyze" method="post" enctype="multipart/form-data" id="upload-form">
+            <label for="file-input"><strong>Option 1: Browse to select a file</strong></label><br>
+            <input type="file" name="file" id="file-input" accept=".xlsx" required><br>
+            <div class="filename" id="filename-text"></div>
+
+            <div class="drop-box" id="drop-zone">
+                <strong>Option 2: Drag and drop file here</strong>
+            </div>
+
+            <button type="submit">Analyze</button>
+        </form>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const fileNameText = document.getElementById('filename-text');
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                fileNameText.textContent = files[0].name;
+            }
+        });
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                fileNameText.textContent = fileInput.files[0].name;
+            }
+        });
+    </script>
+</body>
+</html>
